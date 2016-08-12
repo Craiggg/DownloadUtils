@@ -21,6 +21,8 @@ DownloadFileUtils.getInstand().DownloadFileOnNewThread(downUrl,filename);
 
 示例：
 
-![][示例图片](https://github.com/Craiggg/DownloadUtils/blob/master/ScreenRecorder_Exported_20160812174900.gif)
+![][示例图片]
+
+[示例图片]:https://github.com/Craiggg/DownloadUtils/blob/master/ScreenRecorder_Exported_20160812174900.gif
 
 
