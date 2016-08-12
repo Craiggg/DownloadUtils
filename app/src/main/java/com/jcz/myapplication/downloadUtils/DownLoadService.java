@@ -33,31 +33,11 @@ public class DownLoadService extends Service {
     private int preprogress = 0;
     private Notification notification;
 
-    //test TODO:更新下载进度提示
-    private Handler handler = new Handler() {
-        long progress;
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (preprogress < 100) {
-                updataNotification(progress++);
-            } else {
-                cancleNotification();
-                timer.cancel();
-                timertask.cancel();
-            }
-        }
-    };
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         loadFile();
         return super.onStartCommand(intent, flags, startId);
     }
-
-    //test
-    TimerTask timertask;
-    Timer timer;
 
     //下载文件
     private void loadFile() {
