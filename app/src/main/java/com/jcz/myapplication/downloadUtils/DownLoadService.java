@@ -77,7 +77,7 @@ public class DownLoadService extends Service {
             @Override
             public void onNetWorkError() {
                 cancleNotification();
-                StatusBarUtils.expandStatusBar(DownLoadService.this);
+                StatusBarUtils.collapseStatusBar(DownLoadService.this);
             }
 
             @Override
