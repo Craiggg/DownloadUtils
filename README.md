@@ -3,7 +3,7 @@
 两行代码搞定：
 
 参数说明：
-第一个参数：context；
+第一个参数：context；\n
 第二个参数：是否显示dialog，是的话就自动显示Progressdialog，此时不用添加任何监听事件，故第三个参数可为null；
 第三个参数：listener，可以在下载前，下载中，下载后安装前，网络出错，这四个时机回调运行。
 DownloadFileUtils.getInstand().initDownloadFileUtils(MainActivity.this, true, null);
