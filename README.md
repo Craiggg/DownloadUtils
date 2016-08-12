@@ -21,4 +21,4 @@ DownloadFileUtils.getInstand().DownloadFileOnNewThread(downUrl,filename);
 
 示例：
 
-![][picture](https://github.com/Craiggg/DownloadUtils/blob/master/ScreenRecorder_Exported_20160812174900.gif)
+[![picture]](https://github.com/Craiggg/DownloadUtils/blob/master/ScreenRecorder_Exported_20160812174900.gif)
