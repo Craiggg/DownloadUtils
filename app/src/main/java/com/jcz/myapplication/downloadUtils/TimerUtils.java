@@ -12,28 +12,28 @@ public class TimerUtils {
     private static Timer timer;
     private static TimerTask timerTask;
 
-    public interface OnTimerTaskRunning{
+    public interface OnTimerTaskRunning {
         void onTimerTaskRunning();
     }
 
-    public static void startTimer(long delay,long period,final OnTimerTaskRunning running){
+    public static void startTimer(long delay, long period, final OnTimerTaskRunning running) {
 
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (running!=null){
+                if (running != null) {
                     running.onTimerTaskRunning();
                 }
             }
         };
 
-        timer.schedule(timerTask,delay,period);
+        timer.schedule(timerTask, delay, period);
     }
 
 
-    public static void cancelTimer(){
-        if (timer!=null&&timerTask!=null){
+    public static void cancelTimer() {
+        if (timer != null && timerTask != null) {
             timer.cancel();
             timerTask.cancel();
         }

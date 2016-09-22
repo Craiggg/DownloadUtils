@@ -1,16 +1,23 @@
 package com.jcz.myapplication.downloadUtils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.jcz.myapplication.DialogUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -20,13 +27,25 @@ import java.net.URLConnection;
  */
 public class DownloadFileUtils {
 
+    private static DownloadFileUtils downloadFileUtils;
     private Context context;
-
+    private final int CREATE_PROGRESS = 4;
     private final int PRE_DOWNLOAD = 3;
     private final int COMPLETE = 2;
     private final int NETWORK_ERROR = 1;
     private final int UPDATA_PROGRESS = 0;
     private boolean cancleAble = false;
+    private boolean isShowDialog;//是否展示进度条的Dialog
+    private boolean isTimer;
+    private boolean isFirstIn = true;
+    private String TAG = "DownloadFileUtils";
+    private OnDownloadFileProgressUpdataListener listener;
+    private File downloadFile;
+    private Integer mSize = 0;//下载进度(0~100)
+    private Thread downloadThread;
+
+    private DownloadFileUtils() {
+    }
 
     public interface OnDownloadFileProgressUpdataListener {
         void onPreDownload();
@@ -36,21 +55,10 @@ public class DownloadFileUtils {
         void onNetWorkError();
 
         void onPreInstall(File downloadFile);
+
+
     }
 
-    private OnDownloadFileProgressUpdataListener listener;
-    private File downloadFile;
-    private Integer mSize = 0;//下载进度(0~100)
-    private boolean isShowDialog;//是否展示进度条的Dialog
-
-    private boolean isTimer;
-
-    private String TAG = "DownloadFileUtils";
-
-    private static DownloadFileUtils downloadFileUtils;
-
-    private DownloadFileUtils() {
-    }
 
     public static DownloadFileUtils getInstand() {
         if (downloadFileUtils == null) {
@@ -71,7 +79,7 @@ public class DownloadFileUtils {
     }
 
     /**
-     * 这里接收到的listener的方法一定是在UI线程中对调了。
+     * 这里接收到的listener的方法一定是在UI线程中回调了。
      *
      * @param context
      * @param isShowDialog
@@ -90,8 +98,8 @@ public class DownloadFileUtils {
             switch (msg.what) {
                 case UPDATA_PROGRESS:
                     synchronized (mSize) {
-                        if (isShowDialog && isTimer) {
-                            ProgressDialogUtils.updataHorizontalProgressDialog(mSize + "%", mSize);
+                        if (isTimer) {
+                            showProgressDialog(UPDATA_PROGRESS);
                             isTimer = false;
                         }
                         if (listener != null)
@@ -100,6 +108,7 @@ public class DownloadFileUtils {
                     break;
                 case NETWORK_ERROR:
                     Toast.makeText(context, "网络连接错误,下载更新失败", Toast.LENGTH_SHORT).show();
+                    showProgressDialog(NETWORK_ERROR);
                     if (listener != null)
                         listener.onNetWorkError();
                     break;
@@ -109,9 +118,13 @@ public class DownloadFileUtils {
                     installApk();
                     break;
                 case PRE_DOWNLOAD:
-                    showProgressDialog();
-                    if (listener!=null)
+                    showProgressDialog(PRE_DOWNLOAD);
+                    if (listener != null)
                         listener.onPreDownload();
+                    break;
+                case CREATE_PROGRESS:
+                    Log.d(TAG, "Create_progress");
+                    showProgressDialog(CREATE_PROGRESS);
                     break;
                 default:
                     break;
@@ -127,6 +140,7 @@ public class DownloadFileUtils {
             public void onTimerTaskRunning() {
                 isTimer = true;
                 handler.sendEmptyMessage(UPDATA_PROGRESS);
+                Log.d(TAG, "Updata_progress");
             }
         });
 
@@ -141,14 +155,49 @@ public class DownloadFileUtils {
         this.mSize = mSize;
     }
 
-    public void showProgressDialog() {
-        if (isShowDialog){
-            ProgressDialogUtils.showHorizontalProgressDialog(context, "正在下载更新", mSize + "%", new ProgressDialogUtils.onDialogCallback() {
-                @Override
-                public void ondismissCallback() {
-                    cancleDownload();
-                }
-            });
+    public void showProgressDialog(int status) {
+        if (isShowDialog) {
+            switch (status) {
+                case PRE_DOWNLOAD:
+                    DialogUtils.showProgressDialog(context, "提示", "正在检查更新","取消", false, new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            cancleDownload();
+                        }
+                    },null);
+                    break;
+                case CREATE_PROGRESS:
+                    DialogUtils.showHorizontalProgressDialog(context, "正在下载更新", mSize + "%", new DialogUtils.onNormalDialogCallback() {
+                        @Override
+                        public void onNegativeCallback() {
+                            cancleDownload();
+                        }
+
+                        @Override
+                        public void onPositiveCallback() {
+                        }
+                    });
+                    break;
+                case UPDATA_PROGRESS:
+                    DialogUtils.updataHorizontalProgressDialog(mSize);
+                    break;
+                case COMPLETE:
+                    break;
+                case NETWORK_ERROR:
+                    DialogUtils.showTextDialog(context, "下载失败，网络错误。", "提示", null, "确定", true, new DialogUtils.onNormalDialogCallback() {
+                        @Override
+                        public void onNegativeCallback() {
+                            cancleDownload();
+                        }
+
+                        @Override
+                        public void onPositiveCallback() {
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -163,12 +212,13 @@ public class DownloadFileUtils {
     }
 
     public void DownloadFileOnNewThread(final String url, final String filename) {
-        new Thread(new Runnable() {
+        downloadThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 DownloadFile(url, filename);
             }
-        }).start();
+        });
+        downloadThread.start();
     }
 
     /**
@@ -176,15 +226,18 @@ public class DownloadFileUtils {
      * @param filename
      */
     public void DownloadFile(String url, String filename) {
-        handler.sendEmptyMessage(PRE_DOWNLOAD);
-        initTimerAndTask();
         cancleAble = false;
+        isFirstIn = true;
+        InputStream input = null;
+        FileOutputStream fileOut = null;
+        handler.sendEmptyMessage(PRE_DOWNLOAD);
+        Log.d(TAG, "Pre_download");
         try {
             URLConnection connection = new URL(url).openConnection();
             connection.setConnectTimeout(5000);
             long length = connection.getContentLength();
 
-            InputStream input = connection.getInputStream();
+            input = connection.getInputStream();
             //建立文件夹
             File file = new File(getFolderPath());
             if (!file.exists()) {
@@ -196,7 +249,7 @@ public class DownloadFileUtils {
             }
             downloadFile = new File(getFolderPath() + filename);
             //文件输出流
-            FileOutputStream fileOut = new FileOutputStream(downloadFile);
+            fileOut = new FileOutputStream(downloadFile);
             int len;
             long total = 0;
             byte[] data = new byte[1024];
@@ -209,15 +262,31 @@ public class DownloadFileUtils {
                 synchronized (mSize) {
                     mSize = (int) ((total * 100) / length);
                 }
-                handler.sendEmptyMessage(UPDATA_PROGRESS);
+                if (isFirstIn) {
+                    handler.sendEmptyMessage(CREATE_PROGRESS);
+
+                    initTimerAndTask();
+                    Log.d(TAG, "initTimerAndTask");
+                    isFirstIn = false;
+                } else {
+//                    handler.sendEmptyMessage(UPDATA_PROGRESS);
+                }
             }
-            fileOut.close();
-            input.close();
             handler.sendEmptyMessage(COMPLETE);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            if (!cancleAble){
+                handler.sendEmptyMessage(NETWORK_ERROR);
+            }
             cancleDownload();
-            handler.sendEmptyMessage(NETWORK_ERROR);
+        } finally {
+            try {
+                fileOut.close();
+                input.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
     }
@@ -251,10 +320,12 @@ public class DownloadFileUtils {
      */
     public void cancleDownload() {
         if (isShowDialog) {
-            TimerUtils.cancelTimer();
-            ProgressDialogUtils.dismissDialog();
-            cancleAble = true;
+            DialogUtils.dismissDialog();
         }
+        TimerUtils.cancelTimer();
+        cancleAble = true;
+        if (downloadThread != null)
+            downloadThread.interrupt();
     }
 
 }
