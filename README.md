@@ -1,7 +1,8 @@
 # DownloadUtils
 
-两行代码搞定：
+###两行代码搞定：
 
+第一种是自动弹窗到前台显示下载进度：
 参数说明：
 
 第一个参数：context；
@@ -24,5 +25,12 @@ DownloadFileUtils.getInstand().DownloadFileOnNewThread(downUrl,filename);
 ![][示例图片]
 
 [示例图片]:https://github.com/Craiggg/DownloadUtils/blob/master/ScreenRecorder_Exported_20160812174900.gif
+
+
+也可以通过建立后台服务来下载：
+```java
+ DownLoadService.setInitData(downUrl, filename, -1);
+ startService(new Intent(MainActivity.this, DownLoadService.class));//开启服务启动后台下载处理。问题：app退出后，服务没有退出，若是绑定，切换Activity时，服务不能保证继续运行。
+```
 
 
