@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DownLoadService.setInitData(downUrl, filename, -1);
-                startService(new Intent(MainActivity.this, DownLoadService.class));//开启服务启动后台下载处理。问题：app退出后，服务没有退出，若是绑定，切换Activity时，服务不能保证继续运行。
+                startService(new Intent(MainActivity.this, DownLoadService.class));
             }
         });
     }
