@@ -20,4 +20,20 @@ ServiceDownloadManager downloadManager = new ServiceDownloadManager(this);//this
 downloadManager.autoDownloadFile(downUrl);//传入String类型的下载链接
 ```
 还有断点下载的功能没写，简单的轻量下载工具，目前是在更新APP用。
+以下是需要的权限：
+```java
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission
+	android:name="android.permission.NET_ADMIN"
+	tools:ignore="ProtectedPermissions"/>
+
+<!-- 在SDCard中创建与删除文件权限 -->
+<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+<!-- 往SDCard写入数据权限 -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<!-- 下拉系统状态栏的权限，利用反射调用的，不加Service可以不添加 -->
+<uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+```
+
 ![示例图片](https://github.com/Craiggg/DownloadUtils/blob/master/myTest00.gif)
+
