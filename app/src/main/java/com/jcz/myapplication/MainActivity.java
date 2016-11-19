@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.testing.downloadutil.Callback;
+import com.example.testing.downloadutil.FileDownloadBuilder;
 import com.example.testing.downloadutil.InstallUtil;
 import com.example.testing.downloadutil.SimpleFileDownload;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SimpleFileDownload.Builder()
+                new FileDownloadBuilder(FileDownloadBuilder.File_Type.APK)
                         .setUrl(downUrl)
                         .autoInstall(null)
                         .setDownloadCallback(new Callback() {

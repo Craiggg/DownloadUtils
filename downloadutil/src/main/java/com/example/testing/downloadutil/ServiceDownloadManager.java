@@ -40,7 +40,7 @@ public class ServiceDownloadManager {
         if (iconRes != -1) {
             this.iconRes = iconRes;
         }
-        new SimpleFileDownload.Builder()
+        new FileDownloadBuilder(FileDownloadBuilder.File_Type.APK)
                 .autoInstall(context)
                 .setFileName(fileName)
                 .setUrl(downUrl)

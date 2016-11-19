@@ -35,7 +35,7 @@ public class SimpleFileDownload implements DownloadThreadImpl {
     private boolean autoInstall = true;
     private Context context;
 
-    private SimpleFileDownload() {
+    public SimpleFileDownload() {
         downloadThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -227,57 +227,9 @@ public class SimpleFileDownload implements DownloadThreadImpl {
         return filename;
     }
 
-    private void setAutoInstall(boolean autoInstall, Context context) {
+    public void setAutoInstall(boolean autoInstall, Context context) {
         this.autoInstall = autoInstall;
         this.context = context;
-    }
-
-    public static class Builder implements FactoryImpl {
-
-        private SimpleFileDownload fileDownload;
-
-        public Builder() {
-            fileDownload = new SimpleFileDownload();
-        }
-
-        @Override
-        public DownloadThreadImpl create() {
-            return fileDownload;
-        }
-
-        @Override
-        public FactoryImpl setUrl(String downUrl) {
-            fileDownload.setDownloadUrl(downUrl);
-            return this;
-        }
-
-        @Override
-        public FactoryImpl setDownloadFile(File downloadFile) {
-            fileDownload.setFile(downloadFile);
-            return this;
-        }
-
-        @Override
-        public FactoryImpl autoInstall(Context context) {
-            if (context == null) {
-                fileDownload.setAutoInstall(false, null);
-            } else {
-                fileDownload.setAutoInstall(true, context);
-            }
-            return this;
-        }
-
-        @Override
-        public FactoryImpl setDownloadCallback(Callback callback) {
-            fileDownload.setCallback(callback);
-            return this;
-        }
-
-        @Override
-        public FactoryImpl setFileName(String fileName) {
-            fileDownload.setFileName(fileName);
-            return this;
-        }
     }
 
 }
