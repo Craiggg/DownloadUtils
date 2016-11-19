@@ -5,7 +5,7 @@
 
 撸代码：
 ```java
-new SimpleFileDownload.Builder()
+new FileDownloadBuilder(FileDownloadBuilder.File_Type.APK)
 		.setUrl(downUrl)//添加你的下载连接
 		.autoInstall(null);//是否下载完自动安装，传入context就代表是，传入null就代表否
 		.setDownloadCallback(callback)//传入你的回调实例
@@ -20,3 +20,4 @@ ServiceDownloadManager downloadManager = new ServiceDownloadManager(this);//this
 downloadManager.autoDownloadFile(downUrl);//传入String类型的下载链接
 ```
 还有断点下载的功能没写，简单的轻量下载工具，目前是在更新APP用。
+![示例图片](https://github.com/Craiggg/DownloadUtils/blob/master/myTest00.gif)
