@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new FileDownloadBuilder(FileDownloadBuilder.File_Type.APK)
                         .setUrl(downUrl)
-                        .autoInstall(null)
                         .setDownloadCallback(new Callback() {
                             MaterialDialog dialog;
 

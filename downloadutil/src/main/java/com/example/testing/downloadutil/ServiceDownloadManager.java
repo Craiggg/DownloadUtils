@@ -41,7 +41,6 @@ public class ServiceDownloadManager {
             this.iconRes = iconRes;
         }
         new FileDownloadBuilder(FileDownloadBuilder.File_Type.APK)
-                .autoInstall(context)
                 .setFileName(fileName)
                 .setUrl(downUrl)
                 .setDownloadCallback(new Callback() {
@@ -65,6 +64,7 @@ public class ServiceDownloadManager {
                     public void afterDownload(SimpleFileDownload simpleFileDownload, File file) {
                         cancel();
                         simpleFileDownload.close();
+                        InstallUtil.installApk(context,file);
                     }
 
                     @Override

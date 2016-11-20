@@ -1,7 +1,5 @@
 package com.example.testing.downloadutil;
 
-import android.content.Context;
-
 import java.io.File;
 
 /**
@@ -15,8 +13,6 @@ public interface FactoryImpl {
     FactoryImpl setUrl(String downUrl);
 
     FactoryImpl setDownloadFile(File downloadFile);
-
-    FactoryImpl autoInstall(Context context);
 
     FactoryImpl setDownloadCallback(Callback callback);
 

@@ -1,6 +1,5 @@
 package com.example.testing.downloadutil;
 
-import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
-import static com.example.testing.downloadutil.InstallUtil.installApk;
 
 /**
  * Created by Administrator on 2016/11/19.
@@ -32,8 +29,6 @@ public class SimpleFileDownload implements DownloadThreadImpl {
     private String downloadUrl, filename;
     private float mSize;//下载进度(0~100%)
     private boolean cancleAble = false;
-    private boolean autoInstall = true;
-    private Context context;
 
     public SimpleFileDownload() {
         downloadThread = new Thread(new Runnable() {
@@ -89,9 +84,6 @@ public class SimpleFileDownload implements DownloadThreadImpl {
                 case COMPLETE:
                     if (callback != null && downFile != null) {
                         callback.afterDownload(SimpleFileDownload.this, downFile);
-                    }
-                    if (autoInstall && context != null) {
-                        installApk(context, downFile);
                     }
                     cancleDownload();
                     break;
@@ -225,11 +217,6 @@ public class SimpleFileDownload implements DownloadThreadImpl {
     @Override
     public String getFileName() {
         return filename;
-    }
-
-    public void setAutoInstall(boolean autoInstall, Context context) {
-        this.autoInstall = autoInstall;
-        this.context = context;
     }
 
 }

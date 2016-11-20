@@ -1,7 +1,5 @@
 package com.example.testing.downloadutil;
 
-import android.content.Context;
-
 import java.io.File;
 
 /**
@@ -15,7 +13,7 @@ public class FileDownloadBuilder implements FactoryImpl {
         Nurmal
     }
 
-    private SimpleFileDownload fileDownload;
+    private DownloadThreadImpl fileDownload;
 
     public FileDownloadBuilder(File_Type file_type) {
         if (file_type == File_Type.APK) {
@@ -37,16 +35,6 @@ public class FileDownloadBuilder implements FactoryImpl {
     @Override
     public FactoryImpl setDownloadFile(File downloadFile) {
         fileDownload.setFile(downloadFile);
-        return this;
-    }
-
-    @Override
-    public FactoryImpl autoInstall(Context context) {
-        if (context == null) {
-            fileDownload.setAutoInstall(false, null);
-        } else {
-            fileDownload.setAutoInstall(true, context);
-        }
         return this;
     }
 
