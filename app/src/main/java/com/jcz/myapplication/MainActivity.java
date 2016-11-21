@@ -11,9 +11,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.testing.downloadutil.Callback;
+import com.example.testing.downloadutil.DownloadThreadImpl;
 import com.example.testing.downloadutil.FileDownloadBuilder;
 import com.example.testing.downloadutil.InstallUtil;
-import com.example.testing.downloadutil.SimpleFileDownload;
 
 import java.io.File;
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                             MaterialDialog dialog;
 
                             @Override
-                            public void beforeDownload(final SimpleFileDownload simpleFileDownload) {
+                            public void beforeDownload(final DownloadThreadImpl simpleFileDownload) {
                                 dialog = new MaterialDialog.Builder(MainActivity.this)
                                         .title("提示")
                                         .content("正在检查更新")
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void updataDownload(final SimpleFileDownload simpleFileDownload, float progress, boolean isFirstUpdata) {
+                            public void updataDownload(final DownloadThreadImpl simpleFileDownload, float progress, boolean isFirstUpdata) {
                                 if (isFirstUpdata) {
                                     dialog.dismiss();
                                     dialog = new MaterialDialog.Builder(MainActivity.this)
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void afterDownload(final SimpleFileDownload simpleFileDownload, final File file) {
+                            public void afterDownload(final DownloadThreadImpl simpleFileDownload, final File file) {
                                 dialog.setActionButton(DialogAction.NEUTRAL, "安装");
                                 dialog.getActionButton(DialogAction.NEUTRAL).setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void errorDownload(SimpleFileDownload simpleFileDownload) {
+                            public void errorDownload(DownloadThreadImpl simpleFileDownload) {
                                 dialog.dismiss();
                                 Toast.makeText(MainActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
                             }

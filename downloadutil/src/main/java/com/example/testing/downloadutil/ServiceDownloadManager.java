@@ -47,12 +47,12 @@ public class ServiceDownloadManager {
                     boolean isFirstTime = true;//当网络连接错误时，没有加判断的话通知栏会上下抖动一次。
 
                     @Override
-                    public void beforeDownload(SimpleFileDownload simpleFileDownload) {
+                    public void beforeDownload(DownloadThreadImpl simpleFileDownload) {
                         initNotification();
                     }
 
                     @Override
-                    public void updataDownload(SimpleFileDownload simpleFileDownload, float progress, boolean isFirstUpdata) {
+                    public void updataDownload(DownloadThreadImpl simpleFileDownload, float progress, boolean isFirstUpdata) {
                         if (isFirstTime) {
                             isFirstTime = false;
                             StatusBarUtils.expandStatusBar(context);
@@ -61,14 +61,14 @@ public class ServiceDownloadManager {
                     }
 
                     @Override
-                    public void afterDownload(SimpleFileDownload simpleFileDownload, File file) {
+                    public void afterDownload(DownloadThreadImpl simpleFileDownload, File file) {
                         cancel();
                         simpleFileDownload.close();
                         InstallUtil.installApk(context,file);
                     }
 
                     @Override
-                    public void errorDownload(SimpleFileDownload simpleFileDownload) {
+                    public void errorDownload(DownloadThreadImpl simpleFileDownload) {
                         cancel();
                         simpleFileDownload.close();
                     }

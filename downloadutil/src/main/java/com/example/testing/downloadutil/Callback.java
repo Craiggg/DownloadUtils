@@ -8,12 +8,12 @@ import java.io.File;
 
 public interface Callback {
 
-    void beforeDownload(SimpleFileDownload simpleFileDownload);
+    void beforeDownload(DownloadThreadImpl downloadThread);
 
-    void updataDownload(SimpleFileDownload simpleFileDownload, float progress, boolean isFirstUpdata);
+    void updataDownload(DownloadThreadImpl downloadThread, float progress, boolean isFirstUpdata);
 
-    void afterDownload(SimpleFileDownload simpleFileDownload, File file);
+    void afterDownload(DownloadThreadImpl downloadThread, File file);
 
-    void errorDownload(SimpleFileDownload simpleFileDownload);
+    void errorDownload(DownloadThreadImpl downloadThread);
 
 }
