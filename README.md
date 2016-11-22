@@ -7,7 +7,6 @@
 ```java
 new FileDownloadBuilder(FileDownloadBuilder.File_Type.APK)
 		.setUrl(downUrl)//添加你的下载连接
-		.autoInstall(null);//是否下载完自动安装，传入context就代表是，传入null就代表否
 		.setDownloadCallback(callback)//传入你的回调实例
 		.creat()
 		.start();
