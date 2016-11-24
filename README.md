@@ -22,9 +22,6 @@ downloadManager.autoDownloadFile(downUrl);//传入String类型的下载链接
 以下是需要的权限：
 ```java
 <uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission
-	android:name="android.permission.NET_ADMIN"
-	tools:ignore="ProtectedPermissions"/>
 
 <!-- 在SDCard中创建与删除文件权限 -->
 <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -34,5 +31,5 @@ downloadManager.autoDownloadFile(downUrl);//传入String类型的下载链接
 <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
 ```
 
-![示例图片](https://github.com/Craiggg/DownloadUtils/blob/master/myTest00.gif)
+
 
