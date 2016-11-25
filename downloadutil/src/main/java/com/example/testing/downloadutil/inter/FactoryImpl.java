@@ -1,4 +1,4 @@
-package com.example.testing.downloadutil;
+package com.example.testing.downloadutil.inter;
 
 import java.io.File;
 

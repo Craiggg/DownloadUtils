@@ -6,6 +6,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.example.testing.downloadutil.inter.Callback;
+import com.example.testing.downloadutil.inter.DownloadThreadImpl;
+import com.example.testing.downloadutil.util.TimerUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -75,9 +79,12 @@ public class SimpleFileDownload implements DownloadThreadImpl {
                 case UPDATA_DOWNLOAD:
                     synchronized (TAG) {
                         if (callback != null) {
-                            callback.updataDownload(SimpleFileDownload.this, mSize, isFirstUpdata);
-                            if (isFirstUpdata)
+                            if (isFirstUpdata) {
+                                callback.updataDownload(SimpleFileDownload.this, 0);
                                 isFirstUpdata = false;
+                            } else {
+                                callback.updataDownload(SimpleFileDownload.this, mSize);
+                            }
                         }
                     }
                     break;

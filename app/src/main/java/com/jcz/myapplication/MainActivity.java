@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.testing.downloadutil.Callback;
-import com.example.testing.downloadutil.DownloadThreadImpl;
+import com.example.testing.downloadutil.inter.Callback;
+import com.example.testing.downloadutil.inter.DownloadThreadImpl;
 import com.example.testing.downloadutil.FileDownloadBuilder;
-import com.example.testing.downloadutil.InstallUtil;
+import com.example.testing.downloadutil.util.InstallUtil;
 
 import java.io.File;
 
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void updataDownload(final DownloadThreadImpl simpleFileDownload, float progress, boolean isFirstUpdata) {
-                                if (isFirstUpdata) {
+                            public void updataDownload(final DownloadThreadImpl simpleFileDownload, float progress) {
+                                if (progress == 0) {
                                     dialog.dismiss();
                                     dialog = new MaterialDialog.Builder(MainActivity.this)
                                             .title("正在下载新版本")

@@ -1,4 +1,4 @@
-package com.example.testing.downloadutil;
+package com.example.testing.downloadutil.inter;
 
 import java.io.File;
 
@@ -10,7 +10,7 @@ public interface Callback {
 
     void beforeDownload(DownloadThreadImpl downloadThread);
 
-    void updataDownload(DownloadThreadImpl downloadThread, float progress, boolean isFirstUpdata);
+    void updataDownload(DownloadThreadImpl downloadThread, float progress);
 
     void afterDownload(DownloadThreadImpl downloadThread, File file);
 

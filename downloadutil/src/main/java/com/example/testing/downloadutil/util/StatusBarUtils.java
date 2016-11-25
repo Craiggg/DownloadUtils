@@ -1,4 +1,4 @@
-package com.example.testing.downloadutil;
+package com.example.testing.downloadutil.util;
 
 import android.content.Context;
 import android.os.Build;

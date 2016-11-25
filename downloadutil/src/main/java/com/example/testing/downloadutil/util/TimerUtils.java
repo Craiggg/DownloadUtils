@@ -1,4 +1,4 @@
-package com.example.testing.downloadutil;
+package com.example.testing.downloadutil.util;
 
 import java.util.Timer;
 import java.util.TimerTask;

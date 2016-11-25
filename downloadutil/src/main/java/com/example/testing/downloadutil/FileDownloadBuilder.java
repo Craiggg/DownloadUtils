@@ -1,5 +1,9 @@
 package com.example.testing.downloadutil;
 
+import com.example.testing.downloadutil.inter.Callback;
+import com.example.testing.downloadutil.inter.DownloadThreadImpl;
+import com.example.testing.downloadutil.inter.FactoryImpl;
+
 import java.io.File;
 
 /**

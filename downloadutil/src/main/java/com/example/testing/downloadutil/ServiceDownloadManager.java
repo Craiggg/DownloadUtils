@@ -7,6 +7,11 @@ import android.app.Service;
 import android.content.Context;
 import android.os.Build;
 
+import com.example.testing.downloadutil.inter.Callback;
+import com.example.testing.downloadutil.inter.DownloadThreadImpl;
+import com.example.testing.downloadutil.util.InstallUtil;
+import com.example.testing.downloadutil.util.StatusBarUtils;
+
 import java.io.File;
 
 
@@ -52,7 +57,7 @@ public class ServiceDownloadManager {
                     }
 
                     @Override
-                    public void updataDownload(DownloadThreadImpl simpleFileDownload, float progress, boolean isFirstUpdata) {
+                    public void updataDownload(DownloadThreadImpl simpleFileDownload, float progress) {
                         if (isFirstTime) {
                             isFirstTime = false;
                             StatusBarUtils.expandStatusBar(context);
